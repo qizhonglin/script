@@ -1,0 +1,1634 @@
+[
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/649",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/649/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/649/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/649/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/649",
+    "id": 169704912,
+    "number": 649,
+    "title": "csvsql fails with misleading error if query and dialect are specified with no connection_string",
+    "user": {
+      "login": "chisco50",
+      "id": 10092693,
+      "avatar_url": "https://avatars.githubusercontent.com/u/10092693?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chisco50",
+      "html_url": "https://github.com/chisco50",
+      "followers_url": "https://api.github.com/users/chisco50/followers",
+      "following_url": "https://api.github.com/users/chisco50/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chisco50/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chisco50/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chisco50/subscriptions",
+      "organizations_url": "https://api.github.com/users/chisco50/orgs",
+      "repos_url": "https://api.github.com/users/chisco50/repos",
+      "events_url": "https://api.github.com/users/chisco50/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chisco50/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-08-05T22:02:03Z",
+    "updated_at": "2016-08-05T22:02:03Z",
+    "closed_at": null,
+    "body": "**Behavior**\r\nIf I try to run csvsql with \"dialect\", \"query\" and no \"connection_string\", it will fail with a \"The --dialect option is only valid when --db is not specified.\"\r\n\r\n**Cause:**\r\nGiven that both \"query\" and \"dialect\" are being used, the run enters the following block which sets a default connection_string\r\n\r\n```\r\n# Create an SQLite database in memory if no connection string is specified```\r\n        if query and not connection_string:\r\n            connection_string = \"sqlite:///:memory:\"\r\n            do_insert = True```\r\n```\r\nThen, the following block will always raise the error as there is now a connection string and a dialect:\r\n\r\n```\r\nif self.args.dialect and connection_string:\r\n            self.argparser.error('The --dialect option is only valid when --db is not specified.')\r\n```\r\n**Suggestion:**\r\nRefactor the code (csvsql.py). \r\nOne quick possibility is to call the block that raises the error before the block that sets the default connection string."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/648",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/648/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/648/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/648/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/648",
+    "id": 169638006,
+    "number": 648,
+    "title": "Running csvsql --no-constraints against Oracle generates invalid varchar fields",
+    "user": {
+      "login": "rbrtmrtn",
+      "id": 1463553,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1463553?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/rbrtmrtn",
+      "html_url": "https://github.com/rbrtmrtn",
+      "followers_url": "https://api.github.com/users/rbrtmrtn/followers",
+      "following_url": "https://api.github.com/users/rbrtmrtn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/rbrtmrtn/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/rbrtmrtn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/rbrtmrtn/subscriptions",
+      "organizations_url": "https://api.github.com/users/rbrtmrtn/orgs",
+      "repos_url": "https://api.github.com/users/rbrtmrtn/repos",
+      "events_url": "https://api.github.com/users/rbrtmrtn/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/rbrtmrtn/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-08-05T15:50:48Z",
+    "updated_at": "2016-08-05T15:50:48Z",
+    "closed_at": null,
+    "body": "Running `csvsql --no-constraints -i oracle` will generate a  create statement with `varchar`/`varchar2` fields without lengths, which is invalid per Oracle and raises `ORA-00906: missing left parenthesis`.\r\n\r\nSample output:\r\n\r\n    CREATE TABLE csv_test (\r\n            \"PARCEL\" VARCHAR2,\r\n            \"LOC\" VARCHAR2,\r\n            \"OWNER1\" VARCHAR2\r\n    )"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/646",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/646/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/646/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/646/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/646",
+    "id": 169322262,
+    "number": 646,
+    "title": "Loading table to mysql with csvsql fails",
+    "user": {
+      "login": "yaron-idan",
+      "id": 13436307,
+      "avatar_url": "https://avatars.githubusercontent.com/u/13436307?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yaron-idan",
+      "html_url": "https://github.com/yaron-idan",
+      "followers_url": "https://api.github.com/users/yaron-idan/followers",
+      "following_url": "https://api.github.com/users/yaron-idan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yaron-idan/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yaron-idan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yaron-idan/subscriptions",
+      "organizations_url": "https://api.github.com/users/yaron-idan/orgs",
+      "repos_url": "https://api.github.com/users/yaron-idan/repos",
+      "events_url": "https://api.github.com/users/yaron-idan/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yaron-idan/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/question",
+        "name": "question",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 3,
+    "created_at": "2016-08-04T08:45:54Z",
+    "updated_at": "2016-08-04T15:29:46Z",
+    "closed_at": null,
+    "body": "I'm trying to load a table to mysql using the following command - \r\n`csvsql -e \"utf8\" --db mysql://root:root@localhost/transport?charset=utf8 --insert /tmp/routes.txt`\r\nThe command fails with the following error - \r\n```\r\n(_mysql_exceptions.OperationalError) (1059, \"Identifier name 'route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color' is too long\") [SQL: u'\\nCREATE TABLE routes (\\n\\t`route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color` VARCHAR(76) NOT NULL\\n)\\n\\n']\r\n```\r\n\r\nThis seems strange to me as I'm loading a few other tables using the same method and all of them upload successfully, even though the column identifier of those tables is longer.\r\n\r\nThis is the header line of the failed file I'm trying to upload - \r\n`route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color`\r\n\r\nAnd this is an example of a longer line that uploads just fine - \r\n`agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url`"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/642",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/642/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/642/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/642/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/642",
+    "id": 166334538,
+    "number": 642,
+    "title": "csvsql: it should ignore BOM",
+    "user": {
+      "login": "Flimm",
+      "id": 355454,
+      "avatar_url": "https://avatars.githubusercontent.com/u/355454?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Flimm",
+      "html_url": "https://github.com/Flimm",
+      "followers_url": "https://api.github.com/users/Flimm/followers",
+      "following_url": "https://api.github.com/users/Flimm/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Flimm/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Flimm/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Flimm/subscriptions",
+      "organizations_url": "https://api.github.com/users/Flimm/orgs",
+      "repos_url": "https://api.github.com/users/Flimm/repos",
+      "events_url": "https://api.github.com/users/Flimm/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Flimm/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug",
+        "name": "bug",
+        "color": "e10c02"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2016-07-19T13:43:13Z",
+    "updated_at": "2016-07-20T16:05:43Z",
+    "closed_at": null,
+    "body": "If the CSV file is UTF-8 encoded, and if it begins with a BOM, then `csvsql` will create a table, where the first column's name begins with a BOM. At least it does in MySQL."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/637",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/637/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/637/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/637/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/637",
+    "id": 164692894,
+    "number": 637,
+    "title": "csvsort is corrupting data",
+    "user": {
+      "login": "polvoazul",
+      "id": 1513181,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1513181?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/polvoazul",
+      "html_url": "https://github.com/polvoazul",
+      "followers_url": "https://api.github.com/users/polvoazul/followers",
+      "following_url": "https://api.github.com/users/polvoazul/following{/other_user}",
+      "gists_url": "https://api.github.com/users/polvoazul/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/polvoazul/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/polvoazul/subscriptions",
+      "organizations_url": "https://api.github.com/users/polvoazul/orgs",
+      "repos_url": "https://api.github.com/users/polvoazul/repos",
+      "events_url": "https://api.github.com/users/polvoazul/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/polvoazul/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/question",
+        "name": "question",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2016-07-10T00:47:59Z",
+    "updated_at": "2016-07-14T01:36:06Z",
+    "closed_at": null,
+    "body": "I have noticed strange behaviour in csvsort.  First, it outputs dates in other format YYYY-MM-DD instead of DD/MM/YYYY of the other tools, apart from that it also **CHANGED** some of my data!\r\n\r\n\r\nPlease see if you can reproduce this. I have tested it in two different **Windows** (i know, i know...) machines. Using python3, csvkit@master. (It would be usefull to add a csvkit --version argument)\r\n\r\n```\r\n$cat file.csv\r\na,b,c\r\n00125867,01/01/2011,31/01/2011\r\n00125868,01/12/2004,31/12/2004\r\n00126017,01/01/2008,30/12/2008\r\n00126025,01/01/2005,31/12/2010\r\n```\r\n\r\nNotice how, after applying csvsort the dates in column c are srewed up. It also assumed that column a is an int and removed the leading zeroes!\r\n\r\n```\r\n$csvsort -ca file.csv\r\na,b,c\r\n125867,2011-01-01,3101-01-01\r\n125868,2004-01-12,3101-01-01\r\n126017,2008-01-01,3001-01-01\r\n126025,2005-01-01,3101-01-01\r\n```\r\n"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/636",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/636/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/636/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/636/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/636",
+    "id": 163449837,
+    "number": 636,
+    "title": "Suggestion: Provide shell completion using genzshcomp",
+    "user": {
+      "login": "olejorgenb",
+      "id": 72201,
+      "avatar_url": "https://avatars.githubusercontent.com/u/72201?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/olejorgenb",
+      "html_url": "https://github.com/olejorgenb",
+      "followers_url": "https://api.github.com/users/olejorgenb/followers",
+      "following_url": "https://api.github.com/users/olejorgenb/following{/other_user}",
+      "gists_url": "https://api.github.com/users/olejorgenb/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/olejorgenb/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/olejorgenb/subscriptions",
+      "organizations_url": "https://api.github.com/users/olejorgenb/orgs",
+      "repos_url": "https://api.github.com/users/olejorgenb/repos",
+      "events_url": "https://api.github.com/users/olejorgenb/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/olejorgenb/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2016-07-01T18:25:31Z",
+    "updated_at": "2016-07-14T01:44:05Z",
+    "closed_at": null,
+    "body": "https://pypi.python.org/pypi/genzshcomp/0.5.2\r\n\r\n> Automatic generate to Zsh Completion Function from Python’s Option Parser Modules.\r\n>\r\n>Now, It corresponds to argparse module and optparse module.\r\n\r\nIt works well (all options are correctly completed) out out the box, but have some rough edges (doesn't understand completion fo comma separated lists)\r\n\r\nIf there's interest I can attempt a PR."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/635",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/635/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/635/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/635/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/635",
+    "id": 163242672,
+    "number": 635,
+    "title": "sql2csv: Please explain UTF-8 decoding problem",
+    "user": {
+      "login": "chris-hailstorm",
+      "id": 1454260,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1454260?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chris-hailstorm",
+      "html_url": "https://github.com/chris-hailstorm",
+      "followers_url": "https://api.github.com/users/chris-hailstorm/followers",
+      "following_url": "https://api.github.com/users/chris-hailstorm/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chris-hailstorm/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chris-hailstorm/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chris-hailstorm/subscriptions",
+      "organizations_url": "https://api.github.com/users/chris-hailstorm/orgs",
+      "repos_url": "https://api.github.com/users/chris-hailstorm/repos",
+      "events_url": "https://api.github.com/users/chris-hailstorm/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chris-hailstorm/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug",
+        "name": "bug",
+        "color": "e10c02"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2016-06-30T18:59:52Z",
+    "updated_at": "2016-07-11T03:05:35Z",
+    "closed_at": null,
+    "body": "I'm running a MySQL query using sql2csv.  The columns involved all have utf8_general encoding.\r\n\r\nThe first several rows are returned.  Once a row is reached that includes a non-ASCII character, I get this error: UnicodeDecodeError: 'ascii' codec can't decode byte 0xae in position 47: ordinal not in range(128)\r\n\r\nThis happens whether generating output to screen or redirecting into a file.\r\n\r\nHowever by putting a debug trace in unicsv.py, I can see self.encoding is set to utf-8, which seems correct. The problem is not improved by the \"-e\" option nor by exporting PYTHONIOENCODING env var.\r\n\r\nCan you suggest an approach?"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/633",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/633/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/633/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/633/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/633",
+    "id": 163061636,
+    "number": 633,
+    "title": "csvsql Killed ",
+    "user": {
+      "login": "BrochineLearning",
+      "id": 17282071,
+      "avatar_url": "https://avatars.githubusercontent.com/u/17282071?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/BrochineLearning",
+      "html_url": "https://github.com/BrochineLearning",
+      "followers_url": "https://api.github.com/users/BrochineLearning/followers",
+      "following_url": "https://api.github.com/users/BrochineLearning/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BrochineLearning/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/BrochineLearning/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BrochineLearning/subscriptions",
+      "organizations_url": "https://api.github.com/users/BrochineLearning/orgs",
+      "repos_url": "https://api.github.com/users/BrochineLearning/repos",
+      "events_url": "https://api.github.com/users/BrochineLearning/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/BrochineLearning/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/performance",
+        "name": "performance",
+        "color": "e102d8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 2,
+    "created_at": "2016-06-30T01:18:46Z",
+    "updated_at": "2016-08-04T15:10:55Z",
+    "closed_at": null,
+    "body": "I've been attempting to use csvsql to create a table from an ~4gb .csv file and after around 10-15 minutes the ubuntu terminal returns 'killed'. I'm generally new to using this module etc. so if you need more information let me know. \r\n\r\nInput:\r\n\r\ncsvsql train.csv\r\n\r\ncsvsql --no-contraints train.csv \r\n\r\noutput:\r\n\r\nkilled\r\n\r\nedit: if anyone could let me know what's happening/give another route I'd appreciate it"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/632",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/632/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/632/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/632/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/632",
+    "id": 163017061,
+    "number": 632,
+    "title": "Add option to in2csv to list sheet names",
+    "user": {
+      "login": "khughitt",
+      "id": 125001,
+      "avatar_url": "https://avatars.githubusercontent.com/u/125001?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/khughitt",
+      "html_url": "https://github.com/khughitt",
+      "followers_url": "https://api.github.com/users/khughitt/followers",
+      "following_url": "https://api.github.com/users/khughitt/following{/other_user}",
+      "gists_url": "https://api.github.com/users/khughitt/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/khughitt/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/khughitt/subscriptions",
+      "organizations_url": "https://api.github.com/users/khughitt/orgs",
+      "repos_url": "https://api.github.com/users/khughitt/repos",
+      "events_url": "https://api.github.com/users/khughitt/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/khughitt/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-06-29T20:19:24Z",
+    "updated_at": "2016-06-29T20:27:52Z",
+    "closed_at": null,
+    "body": "When converting multi-sheet excel spreadsheets to CSV, the `--sheet` option for `in2csv` is needed.\r\n\r\nCurrently, I don't believe there is any way to _list_ the sheets in the document without viewing it in something external like Excel or LibreOffice.\r\n\r\nWould it be possible to add an option to list all available sheets? It may even be worth making this the default behavior for in2csv when multiple sheets are present and no specific sheet is specified -- this way a user doesn't accidentally grab the first sheet without realizing there are others."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/631",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/631/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/631/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/631/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/631",
+    "id": 162989041,
+    "number": 631,
+    "title": "non ascii chars in field values causing csvcut to create new fields",
+    "user": {
+      "login": "bbobbadi",
+      "id": 9425714,
+      "avatar_url": "https://avatars.githubusercontent.com/u/9425714?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bbobbadi",
+      "html_url": "https://github.com/bbobbadi",
+      "followers_url": "https://api.github.com/users/bbobbadi/followers",
+      "following_url": "https://api.github.com/users/bbobbadi/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bbobbadi/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bbobbadi/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bbobbadi/subscriptions",
+      "organizations_url": "https://api.github.com/users/bbobbadi/orgs",
+      "repos_url": "https://api.github.com/users/bbobbadi/repos",
+      "events_url": "https://api.github.com/users/bbobbadi/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bbobbadi/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug",
+        "name": "bug",
+        "color": "e10c02"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 15,
+    "created_at": "2016-06-29T18:01:36Z",
+    "updated_at": "2016-08-04T15:13:39Z",
+    "closed_at": null,
+    "body": "\r\n\r\n[testNonASCII.zip](https://github.com/wireservice/csvkit/files/339891/testNonASCII.zip)\r\n\r\nHi There, \r\nI have been using csvcut tool. \r\nMy data is in csv with combination of ascii and non ascii characters. The issue I am facing is when there are some non ascii chars in the filed value it is causing new fields and new lines. Could you please help me to handle non ascii chars. \r\nI have attached the input and output files. The command I have used is \" csvcut -c Col4,preview,Col2,searchable_body,Col3 testNonASCII > result.csv\"\r\nI need to carry these non-ascii chars to the output file with out changes. \r\n\r\nThanks in advance for the help."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/626",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/626/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/626/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/626/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/626",
+    "id": 161417301,
+    "number": 626,
+    "title": "csvsort memory limit",
+    "user": {
+      "login": "simogeo",
+      "id": 154323,
+      "avatar_url": "https://avatars.githubusercontent.com/u/154323?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/simogeo",
+      "html_url": "https://github.com/simogeo",
+      "followers_url": "https://api.github.com/users/simogeo/followers",
+      "following_url": "https://api.github.com/users/simogeo/following{/other_user}",
+      "gists_url": "https://api.github.com/users/simogeo/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/simogeo/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/simogeo/subscriptions",
+      "organizations_url": "https://api.github.com/users/simogeo/orgs",
+      "repos_url": "https://api.github.com/users/simogeo/repos",
+      "events_url": "https://api.github.com/users/simogeo/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/simogeo/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/performance",
+        "name": "performance",
+        "color": "e102d8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 3,
+    "created_at": "2016-06-21T11:55:56Z",
+    "updated_at": "2016-06-23T19:12:50Z",
+    "closed_at": null,
+    "body": "Hi,\r\nI've tried to sort a 1 Gb (only) file with csvsort and `-c` option ... My computer ends up freezing and using all memory (12 Gb) \r\n\r\nIs that \"normal\" ? is that a known issue ? I've also seen issues #581 and #338. \r\nIs there any tip to do so. Thanks "
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/614",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/614/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/614/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/614/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/614",
+    "id": 157662329,
+    "number": 614,
+    "title": "Cannot specify encoding in sql2csv",
+    "user": {
+      "login": "jonashaag",
+      "id": 175722,
+      "avatar_url": "https://avatars.githubusercontent.com/u/175722?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jonashaag",
+      "html_url": "https://github.com/jonashaag",
+      "followers_url": "https://api.github.com/users/jonashaag/followers",
+      "following_url": "https://api.github.com/users/jonashaag/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jonashaag/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jonashaag/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jonashaag/subscriptions",
+      "organizations_url": "https://api.github.com/users/jonashaag/orgs",
+      "repos_url": "https://api.github.com/users/jonashaag/repos",
+      "events_url": "https://api.github.com/users/jonashaag/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jonashaag/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug",
+        "name": "bug",
+        "color": "e10c02"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-05-31T12:44:08Z",
+    "updated_at": "2016-06-03T20:53:59Z",
+    "closed_at": null,
+    "body": "```\r\n$ sql2csv ...\r\n...\r\nYour file is not \"utf-8\" encoded. Please specify the correct encoding with the -e flag.\r\nUse the -v flag to see the complete error.\r\n\r\n$ sql2csv ... -e 'iso-8859-1'\r\nusage: sql2csv [-h] [-v] [-l] [--db CONNECTION_STRING] [--query QUERY] [-H]\r\n               [FILE]\r\nsql2csv: error: argument FILE: can't open 'iso-8859-1': [Errno 2] No such file or directory: 'iso-8859-1'\r\n```"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/610",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/610/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/610/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/610/events",
+    "html_url": "https://github.com/wireservice/csvkit/pull/610",
+    "id": 156446562,
+    "number": 610,
+    "title": "Implement case-insensitive key comparison for csvjoin",
+    "user": {
+      "login": "anorth",
+      "id": 445306,
+      "avatar_url": "https://avatars.githubusercontent.com/u/445306?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/anorth",
+      "html_url": "https://github.com/anorth",
+      "followers_url": "https://api.github.com/users/anorth/followers",
+      "following_url": "https://api.github.com/users/anorth/following{/other_user}",
+      "gists_url": "https://api.github.com/users/anorth/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/anorth/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/anorth/subscriptions",
+      "organizations_url": "https://api.github.com/users/anorth/orgs",
+      "repos_url": "https://api.github.com/users/anorth/repos",
+      "events_url": "https://api.github.com/users/anorth/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/anorth/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2016-05-24T08:18:41Z",
+    "updated_at": "2016-06-04T05:33:50Z",
+    "closed_at": null,
+    "pull_request": {
+      "url": "https://api.github.com/repos/wireservice/csvkit/pulls/610",
+      "html_url": "https://github.com/wireservice/csvkit/pull/610",
+      "diff_url": "https://github.com/wireservice/csvkit/pull/610.diff",
+      "patch_url": "https://github.com/wireservice/csvkit/pull/610.patch"
+    },
+    "body": "This is much nicer than lowercasing files to do the join then trying to restore case that's important later on.\r\n\r\nThanks for the great tools!"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/609",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/609/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/609/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/609/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/609",
+    "id": 156441495,
+    "number": 609,
+    "title": "csvsort behaves as though --skipinitialspace is set",
+    "user": {
+      "login": "uji-villapla",
+      "id": 19547518,
+      "avatar_url": "https://avatars.githubusercontent.com/u/19547518?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/uji-villapla",
+      "html_url": "https://github.com/uji-villapla",
+      "followers_url": "https://api.github.com/users/uji-villapla/followers",
+      "following_url": "https://api.github.com/users/uji-villapla/following{/other_user}",
+      "gists_url": "https://api.github.com/users/uji-villapla/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/uji-villapla/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/uji-villapla/subscriptions",
+      "organizations_url": "https://api.github.com/users/uji-villapla/orgs",
+      "repos_url": "https://api.github.com/users/uji-villapla/repos",
+      "events_url": "https://api.github.com/users/uji-villapla/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/uji-villapla/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug:%20agate",
+        "name": "bug: agate",
+        "color": "d93f0b"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 3,
+    "created_at": "2016-05-24T07:50:45Z",
+    "updated_at": "2016-07-14T01:45:01Z",
+    "closed_at": null,
+    "body": "**csvsort** removes initial whitespace from fields by default (note white space before 'z' on column 'C'):\r\n\r\n```\r\n$ printf \"A,B,C\\n1,2,3\\nx,y, z\\n0,0,0\\n\" | csvsort\r\nA,B,C\r\n0,0,0\r\n1,2,3\r\nx,y,z\r\n```\r\n\r\nother utilities don't:\r\n\r\n```\r\n$ printf \"A,B,C\\n1,2,3\\nx,y, z\\n0,0,0\\n\" | csvformat \r\nA,B,C\r\n1,2,3\r\nx,y, z\r\n0,0,0\r\n```\r\n\r\nunless you request it:\r\n\r\n```\r\n$ printf \"A,B,C\\n1,2,3\\nx,y, z\\n0,0,0\\n\" | csvformat --skipinitialspace\r\nA,B,C\r\n1,2,3\r\nx,y,z\r\n0,0,0\r\n```\r\n\r\nRegards,\r\n                   Juanjo"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/607",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/607/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/607/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/607/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/607",
+    "id": 153566999,
+    "number": 607,
+    "title": "in2csv: Incorrectly transforms a number to a date",
+    "user": {
+      "login": "dcmartin",
+      "id": 427535,
+      "avatar_url": "https://avatars.githubusercontent.com/u/427535?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dcmartin",
+      "html_url": "https://github.com/dcmartin",
+      "followers_url": "https://api.github.com/users/dcmartin/followers",
+      "following_url": "https://api.github.com/users/dcmartin/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dcmartin/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dcmartin/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dcmartin/subscriptions",
+      "organizations_url": "https://api.github.com/users/dcmartin/orgs",
+      "repos_url": "https://api.github.com/users/dcmartin/repos",
+      "events_url": "https://api.github.com/users/dcmartin/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dcmartin/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug:%20type%20inference",
+        "name": "bug: type inference",
+        "color": "d93f0b"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 3,
+    "created_at": "2016-05-07T02:02:38Z",
+    "updated_at": "2016-06-08T19:13:39Z",
+    "closed_at": null,
+    "body": "I have two JSON files both with the same structure; however, one converts into CSV properly and one fails.  They are both valid JSON files.  The attribute in question is \"id\":\"20160506175330-3168-01\" which is converted (on the large file correctly), but is converted improperly on the small file:\r\n\r\n```json\r\n{\"results\":[{\"id\":\"20160506175330-3168-01\",\"changes\":[{\"rev\":\"1-8bda66017d962508e51ac5061557635b\"}],\"doc\":{\"_id\":\"20160506175330-3168-01\",\"_rev\":\"1-8bda66017d962508e51ac5061557635b\",\"year\":\"2016\",\"month\":\"05\",\"day\":\"06\",\"hour\":\"17\",\"minute\":\"53\",\"second\":\"30\",\"imagebox\":\"18x94+428+180\",\"alchemy\":{\"text\":\"person\",\"score\":\"0.845535\"},\"visual\":{\"image\":\"20160506175330-3168-01.jpg\",\"scores\":[{\"classifier_id\":\"Mixed_Color\",\"name\":\"Mixed_Color\",\"score\":0.964822},{\"classifier_id\":\"Stove\",\"name\":\"Stove\",\"score\":0.923713},{\"classifier_id\":\"Archery\",\"name\":\"Archery\",\"score\":0.836994},{\"classifier_id\":\"Dish_Washer\",\"name\":\"Dish_Washer\",\"score\":0.835787},{\"classifier_id\":\"Barber_Shop\",\"name\":\"Barber_Shop\",\"score\":0.825716},{\"classifier_id\":\"Full_Body\",\"name\":\"Full_Body\",\"score\":0.824954},{\"classifier_id\":\"Musical_Instrument\",\"name\":\"Musical_Instrument\",\"score\":0.817304},{\"classifier_id\":\"Beauty_Salon\",\"name\":\"Beauty_Salon\",\"score\":0.808518},{\"classifier_id\":\"Clothing_Store\",\"name\":\"Clothing_Store\",\"score\":0.784035},{\"classifier_id\":\"Distillery\",\"name\":\"Distillery\",\"score\":0.67477},{\"classifier_id\":\"Sweet_Treat\",\"name\":\"Sweet_Treat\",\"score\":0.588916},{\"classifier_id\":\"Beer\",\"name\":\"Beer\",\"score\":0.538915},{\"classifier_id\":\"Store\",\"name\":\"Store\",\"score\":0.536244},{\"classifier_id\":\"Yellow\",\"name\":\"Yellow\",\"score\":0.526932}]}}}],\"last_seq\":\"10457-g1AAAAPreJy90lFqAjEQBuCgFj2B4EOpUgRfXNyscWef9CbtTMZFZF3Brs96E3uT9ib1IMIaE2XpmynUlwkE8n_8TDIhRGtRZzFg0uvNfMakAloNGbPhR4E544ZloLP1ljEvgnxeZOZFDQW9lGW5XNRJiKfnlblrYiRZqtQj6rcr73CpayZNK3pg6bGOmZE80vwr0-xCv1X0q6XViDGJ_t46vId-v9C7iu5YegIEmIw90vxb5w0zxd4cRj9c-Z7lSUEEIP-1ueM_Hf_l-MbJ8iGmxDE8oP2343-u7fvuy6WaRqQf0P7o-Nvu25ZPATRA6JG4PAMPEEFw\",\"pending\":0}\r\n```\r\n```csv\r\nid,changes/0/rev,doc/_id,doc/_rev,doc/year,doc/month,doc/day,doc/hour,doc/minute,doc/second,doc/imagebox,doc/alchemy/text,doc/alchemy/score,doc/visual/image,doc/visual/scores/0/classifier_id,doc/visual/scores/0/name,doc/visual/scores/0/score,doc/visual/scores/1/classifier_id,doc/visual/scores/1/name,doc/visual/scores/1/score,doc/visual/scores/2/classifier_id,doc/visual/scores/2/name,doc/visual/scores/2/score,doc/visual/scores/3/classifier_id,doc/visual/scores/3/name,doc/visual/scores/3/score,doc/visual/scores/4/classifier_id,doc/visual/scores/4/name,doc/visual/scores/4/score,doc/visual/scores/5/classifier_id,doc/visual/scores/5/name,doc/visual/scores/5/score,doc/visual/scores/6/classifier_id,doc/visual/scores/6/name,doc/visual/scores/6/score,doc/visual/scores/7/classifier_id,doc/visual/scores/7/name,doc/visual/scores/7/score,doc/visual/scores/8/classifier_id,doc/visual/scores/8/name,doc/visual/scores/8/score,doc/visual/scores/9/classifier_id,doc/visual/scores/9/name,doc/visual/scores/9/score,doc/visual/scores/10/classifier_id,doc/visual/scores/10/name,doc/visual/scores/10/score,doc/visual/scores/11/classifier_id,doc/visual/scores/11/name,doc/visual/scores/11/score,doc/visual/scores/12/classifier_id,doc/visual/scores/12/name,doc/visual/scores/12/score,doc/visual/scores/13/classifier_id,doc/visual/scores/13/name,doc/visual/scores/13/score\r\n2016-05-06,1-8bda66017d962508e51ac5061557635b,2016-05-06,1-8bda66017d962508e51ac5061557635b,2016,5,6,17,53,30,1801-01-01,person,0.845535,2016-05-06,Mixed_Color,Mixed_Color,0.964822,Stove,Stove,0.923713,Archery,Archery,0.836994,Dish_Washer,Dish_Washer,0.835787,Barber_Shop,Barber_Shop,0.825716,Full_Body,Full_Body,0.824954,Musical_Instrument,Musical_Instrument,0.817304,Beauty_Salon,Beauty_Salon,0.808518,Clothing_Store,Clothing_Store,0.784035,Distillery,Distillery,0.67477,Sweet_Treat,Sweet_Treat,0.588916,Beer,Beer,0.538915,Store,Store,0.536244,Yellow,Yellow,0.526932\r\n```"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/606",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/606/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/606/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/606/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/606",
+    "id": 152853047,
+    "number": 606,
+    "title": "Carriage Return is deleting with csvclean csvcut",
+    "user": {
+      "login": "bbobbadi",
+      "id": 9425714,
+      "avatar_url": "https://avatars.githubusercontent.com/u/9425714?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bbobbadi",
+      "html_url": "https://github.com/bbobbadi",
+      "followers_url": "https://api.github.com/users/bbobbadi/followers",
+      "following_url": "https://api.github.com/users/bbobbadi/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bbobbadi/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bbobbadi/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bbobbadi/subscriptions",
+      "organizations_url": "https://api.github.com/users/bbobbadi/orgs",
+      "repos_url": "https://api.github.com/users/bbobbadi/repos",
+      "events_url": "https://api.github.com/users/bbobbadi/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bbobbadi/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug:%20agate",
+        "name": "bug: agate",
+        "color": "d93f0b"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 4,
+    "created_at": "2016-05-03T19:17:48Z",
+    "updated_at": "2016-06-08T19:38:05Z",
+    "closed_at": null,
+    "body": "Hi\r\nI am using csvclean and csvcut tools, while using these tools the \"Carriage Return\" is removing from the field content, the CR should carry to the output file. Is there any way to retain these special character in the outputfile?"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/605",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/605/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/605/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/605/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/605",
+    "id": 150791805,
+    "number": 605,
+    "title": "XLS only: time >= 24:00 renders invalid result",
+    "user": {
+      "login": "crazyshot",
+      "id": 958982,
+      "avatar_url": "https://avatars.githubusercontent.com/u/958982?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/crazyshot",
+      "html_url": "https://github.com/crazyshot",
+      "followers_url": "https://api.github.com/users/crazyshot/followers",
+      "following_url": "https://api.github.com/users/crazyshot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/crazyshot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/crazyshot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/crazyshot/subscriptions",
+      "organizations_url": "https://api.github.com/users/crazyshot/orgs",
+      "repos_url": "https://api.github.com/users/crazyshot/repos",
+      "events_url": "https://api.github.com/users/crazyshot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/crazyshot/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug:%20type%20inference",
+        "name": "bug: type inference",
+        "color": "d93f0b"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2016-04-25T08:52:43Z",
+    "updated_at": "2016-06-08T19:13:39Z",
+    "closed_at": null,
+    "body": "When at least one cell in the XLS document has time equal or greater than 24:00:00, it renders ONLY this cell numeric content instead of whole document:\r\n\r\n> `in2csv ~/Documents/test-in2csv.xls`\r\n> 1.04166666667\r\n> \r\n> `in2csv -v ~/Documents/test-in2csv.xls`\r\n> Traceback (most recent call last):\r\n>   File \"/usr/local/bin/in2csv\", line 11, in <module>\r\n>     sys.exit(launch_new_instance())\r\n>   File \"/usr/local/lib/python2.7/site-packages/csvkit/utilities/in2csv.py\", line 82, in launch_new_instance\r\n>     utility.main()\r\n>   File \"/usr/local/lib/python2.7/site-packages/csvkit/utilities/in2csv.py\", line 76, in main\r\n>     data = convert.convert(self.input_file, filetype, **kwargs)\r\n>   File \"/usr/local/lib/python2.7/site-packages/csvkit/convert/__init__.py\", line 37, in convert\r\n>     return xls2csv(f, **kwargs)\r\n>   File \"/usr/local/lib/python2.7/site-packages/csvkit/convert/xls.py\", line 144, in xls2csv\r\n>     t, normal_values = NORMALIZERS[column_type](values, datemode=book.datemode)\r\n>   File \"/usr/local/lib/python2.7/site-packages/csvkit/convert/xls.py\", line 54, in normalize_dates\r\n>     v_tuple = xlrd.xldate_as_tuple(v, datemode)\r\n>   File \"/usr/local/lib/python2.7/site-packages/xlrd/xldate.py\", line 86, in xldate_as_tuple\r\n>     raise XLDateAmbiguous(xldate)\r\n> xlrd.xldate.XLDateAmbiguous: 1.04166666667\r\n\r\nIf same document is saved as XLSX, everything fine:\r\n> `in2csv -v ~/Documents/test-in2csv.xlsx`\r\n> Time\r\n> 15:23:00\r\n> 1.04166666667\r\n> 17:23:00\r\n> "
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/602",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/602/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/602/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/602/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/602",
+    "id": 147457623,
+    "number": 602,
+    "title": "Take into account the row size limit in csvsql",
+    "user": {
+      "login": "bryant1410",
+      "id": 3905501,
+      "avatar_url": "https://avatars.githubusercontent.com/u/3905501?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bryant1410",
+      "html_url": "https://github.com/bryant1410",
+      "followers_url": "https://api.github.com/users/bryant1410/followers",
+      "following_url": "https://api.github.com/users/bryant1410/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bryant1410/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bryant1410/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bryant1410/subscriptions",
+      "organizations_url": "https://api.github.com/users/bryant1410/orgs",
+      "repos_url": "https://api.github.com/users/bryant1410/repos",
+      "events_url": "https://api.github.com/users/bryant1410/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bryant1410/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-04-11T15:02:19Z",
+    "updated_at": "2016-06-03T21:18:24Z",
+    "closed_at": null,
+    "body": "Like, for example, [this SO answer states about MySQL](http://stackoverflow.com/a/332805/1165181)."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/597",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/597/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/597/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/597/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/597",
+    "id": 146650394,
+    "number": 597,
+    "title": "Make csvsql output the queries to a script file",
+    "user": {
+      "login": "bryant1410",
+      "id": 3905501,
+      "avatar_url": "https://avatars.githubusercontent.com/u/3905501?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/bryant1410",
+      "html_url": "https://github.com/bryant1410",
+      "followers_url": "https://api.github.com/users/bryant1410/followers",
+      "following_url": "https://api.github.com/users/bryant1410/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bryant1410/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/bryant1410/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bryant1410/subscriptions",
+      "organizations_url": "https://api.github.com/users/bryant1410/orgs",
+      "repos_url": "https://api.github.com/users/bryant1410/repos",
+      "events_url": "https://api.github.com/users/bryant1410/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/bryant1410/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-04-07T14:55:59Z",
+    "updated_at": "2016-04-11T02:28:12Z",
+    "closed_at": null,
+    "body": "I think it would be nice that csvsql, used with the `--insert` option, can output the queries to a script file, and not being mandatory to send it to a database."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/591",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/591/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/591/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/591/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/591",
+    "id": 144213166,
+    "number": 591,
+    "title": "Docs default to old version",
+    "user": {
+      "login": "timwis",
+      "id": 761444,
+      "avatar_url": "https://avatars.githubusercontent.com/u/761444?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/timwis",
+      "html_url": "https://github.com/timwis",
+      "followers_url": "https://api.github.com/users/timwis/followers",
+      "following_url": "https://api.github.com/users/timwis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/timwis/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/timwis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/timwis/subscriptions",
+      "organizations_url": "https://api.github.com/users/timwis/orgs",
+      "repos_url": "https://api.github.com/users/timwis/repos",
+      "events_url": "https://api.github.com/users/timwis/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/timwis/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug",
+        "name": "bug",
+        "color": "e10c02"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/documentation",
+        "name": "documentation",
+        "color": "02d7e1"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 3,
+    "created_at": "2016-03-29T09:48:19Z",
+    "updated_at": "2016-04-11T02:29:00Z",
+    "closed_at": null,
+    "body": "Hey guys, forgive me if this is intentional, but going to csvkit.readthedocs.org redirects you to http://csvkit.readthedocs.org/en/0.9.1/ with an alert box at the top telling you that you're not viewing the latest version, offering a link to http://csvkit.readthedocs.org/en/540/\r\n\r\nIs this intentional? Why wouldn't the docs default to the latest version?"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/585",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/585/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/585/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/585/events",
+    "html_url": "https://github.com/wireservice/csvkit/pull/585",
+    "id": 141113093,
+    "number": 585,
+    "title": "csvsql: Add support for reading query from a file",
+    "user": {
+      "login": "mwojo",
+      "id": 17283982,
+      "avatar_url": "https://avatars.githubusercontent.com/u/17283982?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/mwojo",
+      "html_url": "https://github.com/mwojo",
+      "followers_url": "https://api.github.com/users/mwojo/followers",
+      "following_url": "https://api.github.com/users/mwojo/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mwojo/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/mwojo/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mwojo/subscriptions",
+      "organizations_url": "https://api.github.com/users/mwojo/orgs",
+      "repos_url": "https://api.github.com/users/mwojo/repos",
+      "events_url": "https://api.github.com/users/mwojo/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/mwojo/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": {
+      "url": "https://api.github.com/repos/wireservice/csvkit/milestones/13",
+      "html_url": "https://github.com/wireservice/csvkit/milestones/Picks",
+      "labels_url": "https://api.github.com/repos/wireservice/csvkit/milestones/13/labels",
+      "id": 1565742,
+      "number": 13,
+      "title": "Picks",
+      "description": "",
+      "creator": {
+        "login": "jpmckinney",
+        "id": 26463,
+        "avatar_url": "https://avatars.githubusercontent.com/u/26463?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jpmckinney",
+        "html_url": "https://github.com/jpmckinney",
+        "followers_url": "https://api.github.com/users/jpmckinney/followers",
+        "following_url": "https://api.github.com/users/jpmckinney/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jpmckinney/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jpmckinney/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jpmckinney/subscriptions",
+        "organizations_url": "https://api.github.com/users/jpmckinney/orgs",
+        "repos_url": "https://api.github.com/users/jpmckinney/repos",
+        "events_url": "https://api.github.com/users/jpmckinney/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jpmckinney/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "open_issues": 8,
+      "closed_issues": 14,
+      "state": "open",
+      "created_at": "2016-02-05T15:41:14Z",
+      "updated_at": "2016-06-08T19:46:32Z",
+      "due_on": null,
+      "closed_at": null
+    },
+    "comments": 3,
+    "created_at": "2016-03-15T22:05:47Z",
+    "updated_at": "2016-06-08T14:48:45Z",
+    "closed_at": null,
+    "pull_request": {
+      "url": "https://api.github.com/repos/wireservice/csvkit/pulls/585",
+      "html_url": "https://github.com/wireservice/csvkit/pull/585",
+      "diff_url": "https://github.com/wireservice/csvkit/pull/585.diff",
+      "patch_url": "https://github.com/wireservice/csvkit/pull/585.patch"
+    },
+    "body": "e.g.\r\n```shell\r\n$ csvsql --queryfile complicated.sql file.csv\r\n```\r\nor\r\n```shell\r\n$ csvsql --queryfile - <<SQL file.csv\r\n  some complicated query\r\nSQL\r\n```"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/584",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/584/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/584/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/584/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/584",
+    "id": 139838726,
+    "number": 584,
+    "title": "csvstat: output in CSV format",
+    "user": {
+      "login": "KarolTx",
+      "id": 8162529,
+      "avatar_url": "https://avatars.githubusercontent.com/u/8162529?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/KarolTx",
+      "html_url": "https://github.com/KarolTx",
+      "followers_url": "https://api.github.com/users/KarolTx/followers",
+      "following_url": "https://api.github.com/users/KarolTx/following{/other_user}",
+      "gists_url": "https://api.github.com/users/KarolTx/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/KarolTx/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/KarolTx/subscriptions",
+      "organizations_url": "https://api.github.com/users/KarolTx/orgs",
+      "repos_url": "https://api.github.com/users/KarolTx/repos",
+      "events_url": "https://api.github.com/users/KarolTx/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/KarolTx/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 3,
+    "created_at": "2016-03-10T09:54:07Z",
+    "updated_at": "2016-07-31T17:57:47Z",
+    "closed_at": null,
+    "body": "Hi, could the csvstat command be extended to output the stats in CSV-like format:?\r\n\r\n```\r\ncolumn,class,count,nulls,unique,min,max,sum,mean,median,stdev,max_length,fv_1,fv_2,fv_3,fv_4,fv_5\r\nAAA,int,1000,23,4,...\r\n```\r\n\r\nIt would help a lot on data discovery. Thank you for the great tool.\r\nCheers,\r\nKarol\r\n"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/581",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/581/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/581/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/581/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/581",
+    "id": 138722126,
+    "number": 581,
+    "title": "CSVSTAT Memory limits?",
+    "user": {
+      "login": "dartdog",
+      "id": 87834,
+      "avatar_url": "https://avatars.githubusercontent.com/u/87834?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/dartdog",
+      "html_url": "https://github.com/dartdog",
+      "followers_url": "https://api.github.com/users/dartdog/followers",
+      "following_url": "https://api.github.com/users/dartdog/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dartdog/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/dartdog/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dartdog/subscriptions",
+      "organizations_url": "https://api.github.com/users/dartdog/orgs",
+      "repos_url": "https://api.github.com/users/dartdog/repos",
+      "events_url": "https://api.github.com/users/dartdog/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/dartdog/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/performance",
+        "name": "performance",
+        "color": "e102d8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-03-05T21:06:36Z",
+    "updated_at": "2016-03-09T17:28:45Z",
+    "closed_at": null,
+    "body": "Tried to run csvstat on a 1.9gb file about 7m rows x 74 columns (mixed and sparse) after a long time just got \"killed\". I'm on a 8GB machine with Linux 14.04 & Python 3+ Is there a way to approximate the limits that can be used? Or can I get a more informative error?"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/577",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/577/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/577/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/577/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/577",
+    "id": 133335453,
+    "number": 577,
+    "title": "CSVKit changing date columns to integers",
+    "user": {
+      "login": "craigtb",
+      "id": 14237205,
+      "avatar_url": "https://avatars.githubusercontent.com/u/14237205?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/craigtb",
+      "html_url": "https://github.com/craigtb",
+      "followers_url": "https://api.github.com/users/craigtb/followers",
+      "following_url": "https://api.github.com/users/craigtb/following{/other_user}",
+      "gists_url": "https://api.github.com/users/craigtb/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/craigtb/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/craigtb/subscriptions",
+      "organizations_url": "https://api.github.com/users/craigtb/orgs",
+      "repos_url": "https://api.github.com/users/craigtb/repos",
+      "events_url": "https://api.github.com/users/craigtb/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/craigtb/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/bug:%20type%20inference",
+        "name": "bug: type inference",
+        "color": "d93f0b"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 9,
+    "created_at": "2016-02-12T20:25:38Z",
+    "updated_at": "2016-08-01T02:45:08Z",
+    "closed_at": null,
+    "body": "Hi - When we use the command in2csv <file_name.xls> > <new_file_name.csv> , we notice that our date columns are being converted to integers. This is preventing our usage of the csvkit library. We have looked for solutions on stack overflow, but nothing has worked thus far. Are there any work arounds?  We have run updates for openpyxl (openpyxl==2.2.0-b1), csvkit and pip.  We are using python 2.7.1.\r\n\r\nAny ideas?\r\n\r\nThanks,\r\nCraig"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/575",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/575/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/575/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/575/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/575",
+    "id": 132945375,
+    "number": 575,
+    "title": "performance issue with csvclean detecting errors",
+    "user": {
+      "login": "ThomasMic",
+      "id": 16686064,
+      "avatar_url": "https://avatars.githubusercontent.com/u/16686064?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/ThomasMic",
+      "html_url": "https://github.com/ThomasMic",
+      "followers_url": "https://api.github.com/users/ThomasMic/followers",
+      "following_url": "https://api.github.com/users/ThomasMic/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasMic/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/ThomasMic/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasMic/subscriptions",
+      "organizations_url": "https://api.github.com/users/ThomasMic/orgs",
+      "repos_url": "https://api.github.com/users/ThomasMic/repos",
+      "events_url": "https://api.github.com/users/ThomasMic/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/ThomasMic/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/performance",
+        "name": "performance",
+        "color": "e102d8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 10,
+    "created_at": "2016-02-11T11:14:53Z",
+    "updated_at": "2016-02-11T17:50:01Z",
+    "closed_at": null,
+    "body": "Hello,\r\n\r\nwe faced a problem with csvclean on a simple case of error :\r\n\r\n- the header of the file is composed of n columns\r\n- the rest of the file is a great number of lines with n+1 columns\r\n\r\nwhile validating this kind of file with found that csvclean is taking more and more time, not in a linear scale, to report errors that it found on each line\r\n\r\nThanks"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/572",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/572/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/572/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/572/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/572",
+    "id": 132331130,
+    "number": 572,
+    "title": "Add csvsql --update capability to make --insert able to update table",
+    "user": {
+      "login": "brandon-rhodes",
+      "id": 166162,
+      "avatar_url": "https://avatars.githubusercontent.com/u/166162?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/brandon-rhodes",
+      "html_url": "https://github.com/brandon-rhodes",
+      "followers_url": "https://api.github.com/users/brandon-rhodes/followers",
+      "following_url": "https://api.github.com/users/brandon-rhodes/following{/other_user}",
+      "gists_url": "https://api.github.com/users/brandon-rhodes/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/brandon-rhodes/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/brandon-rhodes/subscriptions",
+      "organizations_url": "https://api.github.com/users/brandon-rhodes/orgs",
+      "repos_url": "https://api.github.com/users/brandon-rhodes/repos",
+      "events_url": "https://api.github.com/users/brandon-rhodes/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/brandon-rhodes/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-02-09T04:50:41Z",
+    "updated_at": "2016-02-12T05:33:11Z",
+    "closed_at": null,
+    "body": "It is wonderful that `--insert` exists and provides a quick way to have a table created and loaded with data!\r\n\r\nBut if the source CSV file is improved, tweaked, or regenerated, then the user is dead in the water. The table in the database is now out of sync with the CSV data, and there is no facility for ever updating it. There are at least two ways that csvkit could solve this:\r\n\r\n* Provide a `--drop` option that would, in a single database transaction, drop the table, create the table, and reload it with the new data.\r\n* The really fun solution would be an `--upsert COLUMN[,COLUMN...]` option that attempted to insert all of the rows, but for those that failed switched to attempting an update using the given columns as keys to search for and match. "
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/571",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/571/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/571/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/571/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/571",
+    "id": 132329352,
+    "number": 571,
+    "title": "csvjoin: Add --snifflimit and --no-inference support",
+    "user": {
+      "login": "jpmckinney",
+      "id": 26463,
+      "avatar_url": "https://avatars.githubusercontent.com/u/26463?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jpmckinney",
+      "html_url": "https://github.com/jpmckinney",
+      "followers_url": "https://api.github.com/users/jpmckinney/followers",
+      "following_url": "https://api.github.com/users/jpmckinney/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jpmckinney/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jpmckinney/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jpmckinney/subscriptions",
+      "organizations_url": "https://api.github.com/users/jpmckinney/orgs",
+      "repos_url": "https://api.github.com/users/jpmckinney/repos",
+      "events_url": "https://api.github.com/users/jpmckinney/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jpmckinney/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": {
+      "url": "https://api.github.com/repos/wireservice/csvkit/milestones/13",
+      "html_url": "https://github.com/wireservice/csvkit/milestones/Picks",
+      "labels_url": "https://api.github.com/repos/wireservice/csvkit/milestones/13/labels",
+      "id": 1565742,
+      "number": 13,
+      "title": "Picks",
+      "description": "",
+      "creator": {
+        "login": "jpmckinney",
+        "id": 26463,
+        "avatar_url": "https://avatars.githubusercontent.com/u/26463?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jpmckinney",
+        "html_url": "https://github.com/jpmckinney",
+        "followers_url": "https://api.github.com/users/jpmckinney/followers",
+        "following_url": "https://api.github.com/users/jpmckinney/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jpmckinney/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jpmckinney/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jpmckinney/subscriptions",
+        "organizations_url": "https://api.github.com/users/jpmckinney/orgs",
+        "repos_url": "https://api.github.com/users/jpmckinney/repos",
+        "events_url": "https://api.github.com/users/jpmckinney/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jpmckinney/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "open_issues": 8,
+      "closed_issues": 14,
+      "state": "open",
+      "created_at": "2016-02-05T15:41:14Z",
+      "updated_at": "2016-06-08T19:46:32Z",
+      "due_on": null,
+      "closed_at": null
+    },
+    "comments": 1,
+    "created_at": "2016-02-09T04:35:45Z",
+    "updated_at": "2016-06-04T15:37:47Z",
+    "closed_at": null,
+    "body": "Like all the other buffering utilities."
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/561",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/561/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/561/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/561/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/561",
+    "id": 131692015,
+    "number": 561,
+    "title": "csvlook: Add option to truncate columns",
+    "user": {
+      "login": "jpmckinney",
+      "id": 26463,
+      "avatar_url": "https://avatars.githubusercontent.com/u/26463?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jpmckinney",
+      "html_url": "https://github.com/jpmckinney",
+      "followers_url": "https://api.github.com/users/jpmckinney/followers",
+      "following_url": "https://api.github.com/users/jpmckinney/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jpmckinney/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jpmckinney/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jpmckinney/subscriptions",
+      "organizations_url": "https://api.github.com/users/jpmckinney/orgs",
+      "repos_url": "https://api.github.com/users/jpmckinney/repos",
+      "events_url": "https://api.github.com/users/jpmckinney/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jpmckinney/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 1,
+    "created_at": "2016-02-05T16:47:56Z",
+    "updated_at": "2016-02-09T21:16:11Z",
+    "closed_at": null,
+    "body": "Thanks to https://github.com/onyxfish/agate/commit/1bb78d3c859e786bda2db57aa8eaf04581561948"
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/525",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/525/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/525/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/525/events",
+    "html_url": "https://github.com/wireservice/csvkit/pull/525",
+    "id": 128395189,
+    "number": 525,
+    "title": "Support for normalizing column names.",
+    "user": {
+      "login": "pudo",
+      "id": 41628,
+      "avatar_url": "https://avatars.githubusercontent.com/u/41628?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/pudo",
+      "html_url": "https://github.com/pudo",
+      "followers_url": "https://api.github.com/users/pudo/followers",
+      "following_url": "https://api.github.com/users/pudo/following{/other_user}",
+      "gists_url": "https://api.github.com/users/pudo/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/pudo/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/pudo/subscriptions",
+      "organizations_url": "https://api.github.com/users/pudo/orgs",
+      "repos_url": "https://api.github.com/users/pudo/repos",
+      "events_url": "https://api.github.com/users/pudo/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/pudo/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2016-01-24T13:03:59Z",
+    "updated_at": "2016-06-04T05:34:05Z",
+    "closed_at": null,
+    "pull_request": {
+      "url": "https://api.github.com/repos/wireservice/csvkit/pulls/525",
+      "html_url": "https://github.com/wireservice/csvkit/pull/525",
+      "diff_url": "https://github.com/wireservice/csvkit/pull/525.diff",
+      "patch_url": "https://github.com/wireservice/csvkit/pull/525.patch"
+    },
+    "body": "This still has the dependencies, since I can't come up with an alternative way of actually doing the normalisation. \r\n\r\nFixes  #396, replaces #505. "
+  },
+  {
+    "url": "https://api.github.com/repos/wireservice/csvkit/issues/517",
+    "repository_url": "https://api.github.com/repos/wireservice/csvkit",
+    "labels_url": "https://api.github.com/repos/wireservice/csvkit/issues/517/labels{/name}",
+    "comments_url": "https://api.github.com/repos/wireservice/csvkit/issues/517/comments",
+    "events_url": "https://api.github.com/repos/wireservice/csvkit/issues/517/events",
+    "html_url": "https://github.com/wireservice/csvkit/issues/517",
+    "id": 128347760,
+    "number": 517,
+    "title": "If additional input is expected, prompt the user",
+    "user": {
+      "login": "jpmckinney",
+      "id": 26463,
+      "avatar_url": "https://avatars.githubusercontent.com/u/26463?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jpmckinney",
+      "html_url": "https://github.com/jpmckinney",
+      "followers_url": "https://api.github.com/users/jpmckinney/followers",
+      "following_url": "https://api.github.com/users/jpmckinney/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jpmckinney/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jpmckinney/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jpmckinney/subscriptions",
+      "organizations_url": "https://api.github.com/users/jpmckinney/orgs",
+      "repos_url": "https://api.github.com/users/jpmckinney/repos",
+      "events_url": "https://api.github.com/users/jpmckinney/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jpmckinney/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/feature",
+        "name": "feature",
+        "color": "02e10c"
+      },
+      {
+        "url": "https://api.github.com/repos/wireservice/csvkit/labels/Low%20Priority",
+        "name": "Low Priority",
+        "color": "c7def8"
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignee": null,
+    "assignees": [
+
+    ],
+    "milestone": {
+      "url": "https://api.github.com/repos/wireservice/csvkit/milestones/13",
+      "html_url": "https://github.com/wireservice/csvkit/milestones/Picks",
+      "labels_url": "https://api.github.com/repos/wireservice/csvkit/milestones/13/labels",
+      "id": 1565742,
+      "number": 13,
+      "title": "Picks",
+      "description": "",
+      "creator": {
+        "login": "jpmckinney",
+        "id": 26463,
+        "avatar_url": "https://avatars.githubusercontent.com/u/26463?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jpmckinney",
+        "html_url": "https://github.com/jpmckinney",
+        "followers_url": "https://api.github.com/users/jpmckinney/followers",
+        "following_url": "https://api.github.com/users/jpmckinney/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jpmckinney/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jpmckinney/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jpmckinney/subscriptions",
+        "organizations_url": "https://api.github.com/users/jpmckinney/orgs",
+        "repos_url": "https://api.github.com/users/jpmckinney/repos",
+        "events_url": "https://api.github.com/users/jpmckinney/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jpmckinney/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "open_issues": 8,
+      "closed_issues": 14,
+      "state": "open",
+      "created_at": "2016-02-05T15:41:14Z",
+      "updated_at": "2016-06-08T19:46:32Z",
+      "due_on": null,
+      "closed_at": null
+    },
+    "comments": 2,
+    "created_at": "2016-01-23T19:33:21Z",
+    "updated_at": "2016-06-03T22:39:02Z",
+    "closed_at": null,
+    "body": "Otherwise, it just looks like the command is taking forever to run.\r\n\r\ne.g. `csvcut` on its own.\r\n"
+  }
+]

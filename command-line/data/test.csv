@@ -1,0 +1,505 @@
+url,repository_url,labels_url,comments_url,events_url,html_url,id,number,title,user,labels,state,locked,assignee,assignees,milestone,comments,created_at,updated_at,closed_at,body,pull_request
+https://api.github.com/repos/wireservice/csvkit/issues/649,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/649/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/649/comments,https://api.github.com/repos/wireservice/csvkit/issues/649/events,https://github.com/wireservice/csvkit/issues/649,169704912,649,csvsql fails with misleading error if query and dialect are specified with no connection_string,,,open,False,,,,0,2016-08-05T22:02:03Z,2016-08-05T22:02:03Z,,"**Behavior**
+
+If I try to run csvsql with ""dialect"", ""query"" and no ""connection_string"", it will fail with a ""The --dialect option is only valid when --db is not specified.""
+
+
+
+**Cause:**
+
+Given that both ""query"" and ""dialect"" are being used, the run enters the following block which sets a default connection_string
+
+
+
+```
+
+# Create an SQLite database in memory if no connection string is specified```
+
+        if query and not connection_string:
+
+            connection_string = ""sqlite:///:memory:""
+
+            do_insert = True```
+
+```
+
+Then, the following block will always raise the error as there is now a connection string and a dialect:
+
+
+
+```
+
+if self.args.dialect and connection_string:
+
+            self.argparser.error('The --dialect option is only valid when --db is not specified.')
+
+```
+
+**Suggestion:**
+
+Refactor the code (csvsql.py). 
+
+One quick possibility is to call the block that raises the error before the block that sets the default connection string.",
+https://api.github.com/repos/wireservice/csvkit/issues/648,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/648/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/648/comments,https://api.github.com/repos/wireservice/csvkit/issues/648/events,https://github.com/wireservice/csvkit/issues/648,169638006,648,Running csvsql --no-constraints against Oracle generates invalid varchar fields,,,open,False,,,,0,2016-08-05T15:50:48Z,2016-08-05T15:50:48Z,,"Running `csvsql --no-constraints -i oracle` will generate a  create statement with `varchar`/`varchar2` fields without lengths, which is invalid per Oracle and raises `ORA-00906: missing left parenthesis`.
+
+
+
+Sample output:
+
+
+
+    CREATE TABLE csv_test (
+
+            ""PARCEL"" VARCHAR2,
+
+            ""LOC"" VARCHAR2,
+
+            ""OWNER1"" VARCHAR2
+
+    )",
+https://api.github.com/repos/wireservice/csvkit/issues/646,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/646/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/646/comments,https://api.github.com/repos/wireservice/csvkit/issues/646/events,https://github.com/wireservice/csvkit/issues/646,169322262,646,Loading table to mysql with csvsql fails,,,open,False,,,,3,2016-08-04T08:45:54Z,2016-08-04T15:29:46Z,,"I'm trying to load a table to mysql using the following command - 
+
+`csvsql -e ""utf8"" --db mysql://root:root@localhost/transport?charset=utf8 --insert /tmp/routes.txt`
+
+The command fails with the following error - 
+
+```
+
+(_mysql_exceptions.OperationalError) (1059, ""Identifier name 'route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color' is too long"") [SQL: u'\nCREATE TABLE routes (\n\t`route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color` VARCHAR(76) NOT NULL\n)\n\n']
+
+```
+
+
+
+This seems strange to me as I'm loading a few other tables using the same method and all of them upload successfully, even though the column identifier of those tables is longer.
+
+
+
+This is the header line of the failed file I'm trying to upload - 
+
+`route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_color`
+
+
+
+And this is an example of a longer line that uploads just fine - 
+
+`agency_id,agency_name,agency_url,agency_timezone,agency_lang,agency_phone,agency_fare_url`",
+https://api.github.com/repos/wireservice/csvkit/issues/642,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/642/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/642/comments,https://api.github.com/repos/wireservice/csvkit/issues/642/events,https://github.com/wireservice/csvkit/issues/642,166334538,642,csvsql: it should ignore BOM,,,open,False,,,,1,2016-07-19T13:43:13Z,2016-07-20T16:05:43Z,,"If the CSV file is UTF-8 encoded, and if it begins with a BOM, then `csvsql` will create a table, where the first column's name begins with a BOM. At least it does in MySQL.",
+https://api.github.com/repos/wireservice/csvkit/issues/637,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/637/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/637/comments,https://api.github.com/repos/wireservice/csvkit/issues/637/events,https://github.com/wireservice/csvkit/issues/637,164692894,637,csvsort is corrupting data,,,open,False,,,,1,2016-07-10T00:47:59Z,2016-07-14T01:36:06Z,,"I have noticed strange behaviour in csvsort.  First, it outputs dates in other format YYYY-MM-DD instead of DD/MM/YYYY of the other tools, apart from that it also **CHANGED** some of my data!
+
+
+
+
+
+Please see if you can reproduce this. I have tested it in two different **Windows** (i know, i know...) machines. Using python3, csvkit@master. (It would be usefull to add a csvkit --version argument)
+
+
+
+```
+
+$cat file.csv
+
+a,b,c
+
+00125867,01/01/2011,31/01/2011
+
+00125868,01/12/2004,31/12/2004
+
+00126017,01/01/2008,30/12/2008
+
+00126025,01/01/2005,31/12/2010
+
+```
+
+
+
+Notice how, after applying csvsort the dates in column c are srewed up. It also assumed that column a is an int and removed the leading zeroes!
+
+
+
+```
+
+$csvsort -ca file.csv
+
+a,b,c
+
+125867,2011-01-01,3101-01-01
+
+125868,2004-01-12,3101-01-01
+
+126017,2008-01-01,3001-01-01
+
+126025,2005-01-01,3101-01-01
+
+```
+
+",
+https://api.github.com/repos/wireservice/csvkit/issues/636,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/636/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/636/comments,https://api.github.com/repos/wireservice/csvkit/issues/636/events,https://github.com/wireservice/csvkit/issues/636,163449837,636,Suggestion: Provide shell completion using genzshcomp,,,open,False,,,,1,2016-07-01T18:25:31Z,2016-07-14T01:44:05Z,,"https://pypi.python.org/pypi/genzshcomp/0.5.2
+
+
+
+> Automatic generate to Zsh Completion Function from Python’s Option Parser Modules.
+
+>
+
+>Now, It corresponds to argparse module and optparse module.
+
+
+
+It works well (all options are correctly completed) out out the box, but have some rough edges (doesn't understand completion fo comma separated lists)
+
+
+
+If there's interest I can attempt a PR.",
+https://api.github.com/repos/wireservice/csvkit/issues/635,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/635/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/635/comments,https://api.github.com/repos/wireservice/csvkit/issues/635/events,https://github.com/wireservice/csvkit/issues/635,163242672,635,sql2csv: Please explain UTF-8 decoding problem,,,open,False,,,,1,2016-06-30T18:59:52Z,2016-07-11T03:05:35Z,,"I'm running a MySQL query using sql2csv.  The columns involved all have utf8_general encoding.
+
+
+
+The first several rows are returned.  Once a row is reached that includes a non-ASCII character, I get this error: UnicodeDecodeError: 'ascii' codec can't decode byte 0xae in position 47: ordinal not in range(128)
+
+
+
+This happens whether generating output to screen or redirecting into a file.
+
+
+
+However by putting a debug trace in unicsv.py, I can see self.encoding is set to utf-8, which seems correct. The problem is not improved by the ""-e"" option nor by exporting PYTHONIOENCODING env var.
+
+
+
+Can you suggest an approach?",
+https://api.github.com/repos/wireservice/csvkit/issues/633,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/633/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/633/comments,https://api.github.com/repos/wireservice/csvkit/issues/633/events,https://github.com/wireservice/csvkit/issues/633,163061636,633,csvsql Killed ,,,open,False,,,,2,2016-06-30T01:18:46Z,2016-08-04T15:10:55Z,,"I've been attempting to use csvsql to create a table from an ~4gb .csv file and after around 10-15 minutes the ubuntu terminal returns 'killed'. I'm generally new to using this module etc. so if you need more information let me know. 
+
+
+
+Input:
+
+
+
+csvsql train.csv
+
+
+
+csvsql --no-contraints train.csv 
+
+
+
+output:
+
+
+
+killed
+
+
+
+edit: if anyone could let me know what's happening/give another route I'd appreciate it",
+https://api.github.com/repos/wireservice/csvkit/issues/632,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/632/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/632/comments,https://api.github.com/repos/wireservice/csvkit/issues/632/events,https://github.com/wireservice/csvkit/issues/632,163017061,632,Add option to in2csv to list sheet names,,,open,False,,,,0,2016-06-29T20:19:24Z,2016-06-29T20:27:52Z,,"When converting multi-sheet excel spreadsheets to CSV, the `--sheet` option for `in2csv` is needed.
+
+
+
+Currently, I don't believe there is any way to _list_ the sheets in the document without viewing it in something external like Excel or LibreOffice.
+
+
+
+Would it be possible to add an option to list all available sheets? It may even be worth making this the default behavior for in2csv when multiple sheets are present and no specific sheet is specified -- this way a user doesn't accidentally grab the first sheet without realizing there are others.",
+https://api.github.com/repos/wireservice/csvkit/issues/631,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/631/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/631/comments,https://api.github.com/repos/wireservice/csvkit/issues/631/events,https://github.com/wireservice/csvkit/issues/631,162989041,631,non ascii chars in field values causing csvcut to create new fields,,,open,False,,,,15,2016-06-29T18:01:36Z,2016-08-04T15:13:39Z,,"
+
+
+
+[testNonASCII.zip](https://github.com/wireservice/csvkit/files/339891/testNonASCII.zip)
+
+
+
+Hi There, 
+
+I have been using csvcut tool. 
+
+My data is in csv with combination of ascii and non ascii characters. The issue I am facing is when there are some non ascii chars in the filed value it is causing new fields and new lines. Could you please help me to handle non ascii chars. 
+
+I have attached the input and output files. The command I have used is "" csvcut -c Col4,preview,Col2,searchable_body,Col3 testNonASCII > result.csv""
+
+I need to carry these non-ascii chars to the output file with out changes. 
+
+
+
+Thanks in advance for the help.",
+https://api.github.com/repos/wireservice/csvkit/issues/626,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/626/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/626/comments,https://api.github.com/repos/wireservice/csvkit/issues/626/events,https://github.com/wireservice/csvkit/issues/626,161417301,626,csvsort memory limit,,,open,False,,,,3,2016-06-21T11:55:56Z,2016-06-23T19:12:50Z,,"Hi,
+
+I've tried to sort a 1 Gb (only) file with csvsort and `-c` option ... My computer ends up freezing and using all memory (12 Gb) 
+
+
+
+Is that ""normal"" ? is that a known issue ? I've also seen issues #581 and #338. 
+
+Is there any tip to do so. Thanks ",
+https://api.github.com/repos/wireservice/csvkit/issues/614,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/614/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/614/comments,https://api.github.com/repos/wireservice/csvkit/issues/614/events,https://github.com/wireservice/csvkit/issues/614,157662329,614,Cannot specify encoding in sql2csv,,,open,False,,,,0,2016-05-31T12:44:08Z,2016-06-03T20:53:59Z,,"```
+
+$ sql2csv ...
+
+...
+
+Your file is not ""utf-8"" encoded. Please specify the correct encoding with the -e flag.
+
+Use the -v flag to see the complete error.
+
+
+
+$ sql2csv ... -e 'iso-8859-1'
+
+usage: sql2csv [-h] [-v] [-l] [--db CONNECTION_STRING] [--query QUERY] [-H]
+
+               [FILE]
+
+sql2csv: error: argument FILE: can't open 'iso-8859-1': [Errno 2] No such file or directory: 'iso-8859-1'
+
+```",
+https://api.github.com/repos/wireservice/csvkit/issues/610,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/610/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/610/comments,https://api.github.com/repos/wireservice/csvkit/issues/610/events,https://github.com/wireservice/csvkit/pull/610,156446562,610,Implement case-insensitive key comparison for csvjoin,,,open,False,,,,1,2016-05-24T08:18:41Z,2016-06-04T05:33:50Z,,"This is much nicer than lowercasing files to do the join then trying to restore case that's important later on.
+
+
+
+Thanks for the great tools!",
+https://api.github.com/repos/wireservice/csvkit/issues/609,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/609/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/609/comments,https://api.github.com/repos/wireservice/csvkit/issues/609/events,https://github.com/wireservice/csvkit/issues/609,156441495,609,csvsort behaves as though --skipinitialspace is set,,,open,False,,,,3,2016-05-24T07:50:45Z,2016-07-14T01:45:01Z,,"**csvsort** removes initial whitespace from fields by default (note white space before 'z' on column 'C'):
+
+
+
+```
+
+$ printf ""A,B,C\n1,2,3\nx,y, z\n0,0,0\n"" | csvsort
+
+A,B,C
+
+0,0,0
+
+1,2,3
+
+x,y,z
+
+```
+
+
+
+other utilities don't:
+
+
+
+```
+
+$ printf ""A,B,C\n1,2,3\nx,y, z\n0,0,0\n"" | csvformat 
+
+A,B,C
+
+1,2,3
+
+x,y, z
+
+0,0,0
+
+```
+
+
+
+unless you request it:
+
+
+
+```
+
+$ printf ""A,B,C\n1,2,3\nx,y, z\n0,0,0\n"" | csvformat --skipinitialspace
+
+A,B,C
+
+1,2,3
+
+x,y,z
+
+0,0,0
+
+```
+
+
+
+Regards,
+
+                   Juanjo",
+https://api.github.com/repos/wireservice/csvkit/issues/607,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/607/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/607/comments,https://api.github.com/repos/wireservice/csvkit/issues/607/events,https://github.com/wireservice/csvkit/issues/607,153566999,607,in2csv: Incorrectly transforms a number to a date,,,open,False,,,,3,2016-05-07T02:02:38Z,2016-06-08T19:13:39Z,,"I have two JSON files both with the same structure; however, one converts into CSV properly and one fails.  They are both valid JSON files.  The attribute in question is ""id"":""20160506175330-3168-01"" which is converted (on the large file correctly), but is converted improperly on the small file:
+
+
+
+```json
+
+{""results"":[{""id"":""20160506175330-3168-01"",""changes"":[{""rev"":""1-8bda66017d962508e51ac5061557635b""}],""doc"":{""_id"":""20160506175330-3168-01"",""_rev"":""1-8bda66017d962508e51ac5061557635b"",""year"":""2016"",""month"":""05"",""day"":""06"",""hour"":""17"",""minute"":""53"",""second"":""30"",""imagebox"":""18x94+428+180"",""alchemy"":{""text"":""person"",""score"":""0.845535""},""visual"":{""image"":""20160506175330-3168-01.jpg"",""scores"":[{""classifier_id"":""Mixed_Color"",""name"":""Mixed_Color"",""score"":0.964822},{""classifier_id"":""Stove"",""name"":""Stove"",""score"":0.923713},{""classifier_id"":""Archery"",""name"":""Archery"",""score"":0.836994},{""classifier_id"":""Dish_Washer"",""name"":""Dish_Washer"",""score"":0.835787},{""classifier_id"":""Barber_Shop"",""name"":""Barber_Shop"",""score"":0.825716},{""classifier_id"":""Full_Body"",""name"":""Full_Body"",""score"":0.824954},{""classifier_id"":""Musical_Instrument"",""name"":""Musical_Instrument"",""score"":0.817304},{""classifier_id"":""Beauty_Salon"",""name"":""Beauty_Salon"",""score"":0.808518},{""classifier_id"":""Clothing_Store"",""name"":""Clothing_Store"",""score"":0.784035},{""classifier_id"":""Distillery"",""name"":""Distillery"",""score"":0.67477},{""classifier_id"":""Sweet_Treat"",""name"":""Sweet_Treat"",""score"":0.588916},{""classifier_id"":""Beer"",""name"":""Beer"",""score"":0.538915},{""classifier_id"":""Store"",""name"":""Store"",""score"":0.536244},{""classifier_id"":""Yellow"",""name"":""Yellow"",""score"":0.526932}]}}}],""last_seq"":""10457-g1AAAAPreJy90lFqAjEQBuCgFj2B4EOpUgRfXNyscWef9CbtTMZFZF3Brs96E3uT9ib1IMIaE2XpmynUlwkE8n_8TDIhRGtRZzFg0uvNfMakAloNGbPhR4E544ZloLP1ljEvgnxeZOZFDQW9lGW5XNRJiKfnlblrYiRZqtQj6rcr73CpayZNK3pg6bGOmZE80vwr0-xCv1X0q6XViDGJ_t46vId-v9C7iu5YegIEmIw90vxb5w0zxd4cRj9c-Z7lSUEEIP-1ueM_Hf_l-MbJ8iGmxDE8oP2343-u7fvuy6WaRqQf0P7o-Nvu25ZPATRA6JG4PAMPEEFw"",""pending"":0}
+
+```
+
+```csv
+
+id,changes/0/rev,doc/_id,doc/_rev,doc/year,doc/month,doc/day,doc/hour,doc/minute,doc/second,doc/imagebox,doc/alchemy/text,doc/alchemy/score,doc/visual/image,doc/visual/scores/0/classifier_id,doc/visual/scores/0/name,doc/visual/scores/0/score,doc/visual/scores/1/classifier_id,doc/visual/scores/1/name,doc/visual/scores/1/score,doc/visual/scores/2/classifier_id,doc/visual/scores/2/name,doc/visual/scores/2/score,doc/visual/scores/3/classifier_id,doc/visual/scores/3/name,doc/visual/scores/3/score,doc/visual/scores/4/classifier_id,doc/visual/scores/4/name,doc/visual/scores/4/score,doc/visual/scores/5/classifier_id,doc/visual/scores/5/name,doc/visual/scores/5/score,doc/visual/scores/6/classifier_id,doc/visual/scores/6/name,doc/visual/scores/6/score,doc/visual/scores/7/classifier_id,doc/visual/scores/7/name,doc/visual/scores/7/score,doc/visual/scores/8/classifier_id,doc/visual/scores/8/name,doc/visual/scores/8/score,doc/visual/scores/9/classifier_id,doc/visual/scores/9/name,doc/visual/scores/9/score,doc/visual/scores/10/classifier_id,doc/visual/scores/10/name,doc/visual/scores/10/score,doc/visual/scores/11/classifier_id,doc/visual/scores/11/name,doc/visual/scores/11/score,doc/visual/scores/12/classifier_id,doc/visual/scores/12/name,doc/visual/scores/12/score,doc/visual/scores/13/classifier_id,doc/visual/scores/13/name,doc/visual/scores/13/score
+
+2016-05-06,1-8bda66017d962508e51ac5061557635b,2016-05-06,1-8bda66017d962508e51ac5061557635b,2016,5,6,17,53,30,1801-01-01,person,0.845535,2016-05-06,Mixed_Color,Mixed_Color,0.964822,Stove,Stove,0.923713,Archery,Archery,0.836994,Dish_Washer,Dish_Washer,0.835787,Barber_Shop,Barber_Shop,0.825716,Full_Body,Full_Body,0.824954,Musical_Instrument,Musical_Instrument,0.817304,Beauty_Salon,Beauty_Salon,0.808518,Clothing_Store,Clothing_Store,0.784035,Distillery,Distillery,0.67477,Sweet_Treat,Sweet_Treat,0.588916,Beer,Beer,0.538915,Store,Store,0.536244,Yellow,Yellow,0.526932
+
+```",
+https://api.github.com/repos/wireservice/csvkit/issues/606,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/606/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/606/comments,https://api.github.com/repos/wireservice/csvkit/issues/606/events,https://github.com/wireservice/csvkit/issues/606,152853047,606,Carriage Return is deleting with csvclean csvcut,,,open,False,,,,4,2016-05-03T19:17:48Z,2016-06-08T19:38:05Z,,"Hi
+
+I am using csvclean and csvcut tools, while using these tools the ""Carriage Return"" is removing from the field content, the CR should carry to the output file. Is there any way to retain these special character in the outputfile?",
+https://api.github.com/repos/wireservice/csvkit/issues/605,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/605/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/605/comments,https://api.github.com/repos/wireservice/csvkit/issues/605/events,https://github.com/wireservice/csvkit/issues/605,150791805,605,XLS only: time >= 24:00 renders invalid result,,,open,False,,,,1,2016-04-25T08:52:43Z,2016-06-08T19:13:39Z,,"When at least one cell in the XLS document has time equal or greater than 24:00:00, it renders ONLY this cell numeric content instead of whole document:
+
+
+
+> `in2csv ~/Documents/test-in2csv.xls`
+
+> 1.04166666667
+
+> 
+
+> `in2csv -v ~/Documents/test-in2csv.xls`
+
+> Traceback (most recent call last):
+
+>   File ""/usr/local/bin/in2csv"", line 11, in <module>
+
+>     sys.exit(launch_new_instance())
+
+>   File ""/usr/local/lib/python2.7/site-packages/csvkit/utilities/in2csv.py"", line 82, in launch_new_instance
+
+>     utility.main()
+
+>   File ""/usr/local/lib/python2.7/site-packages/csvkit/utilities/in2csv.py"", line 76, in main
+
+>     data = convert.convert(self.input_file, filetype, **kwargs)
+
+>   File ""/usr/local/lib/python2.7/site-packages/csvkit/convert/__init__.py"", line 37, in convert
+
+>     return xls2csv(f, **kwargs)
+
+>   File ""/usr/local/lib/python2.7/site-packages/csvkit/convert/xls.py"", line 144, in xls2csv
+
+>     t, normal_values = NORMALIZERS[column_type](values, datemode=book.datemode)
+
+>   File ""/usr/local/lib/python2.7/site-packages/csvkit/convert/xls.py"", line 54, in normalize_dates
+
+>     v_tuple = xlrd.xldate_as_tuple(v, datemode)
+
+>   File ""/usr/local/lib/python2.7/site-packages/xlrd/xldate.py"", line 86, in xldate_as_tuple
+
+>     raise XLDateAmbiguous(xldate)
+
+> xlrd.xldate.XLDateAmbiguous: 1.04166666667
+
+
+
+If same document is saved as XLSX, everything fine:
+
+> `in2csv -v ~/Documents/test-in2csv.xlsx`
+
+> Time
+
+> 15:23:00
+
+> 1.04166666667
+
+> 17:23:00
+
+> ",
+https://api.github.com/repos/wireservice/csvkit/issues/602,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/602/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/602/comments,https://api.github.com/repos/wireservice/csvkit/issues/602/events,https://github.com/wireservice/csvkit/issues/602,147457623,602,Take into account the row size limit in csvsql,,,open,False,,,,0,2016-04-11T15:02:19Z,2016-06-03T21:18:24Z,,"Like, for example, [this SO answer states about MySQL](http://stackoverflow.com/a/332805/1165181).",
+https://api.github.com/repos/wireservice/csvkit/issues/597,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/597/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/597/comments,https://api.github.com/repos/wireservice/csvkit/issues/597/events,https://github.com/wireservice/csvkit/issues/597,146650394,597,Make csvsql output the queries to a script file,,,open,False,,,,0,2016-04-07T14:55:59Z,2016-04-11T02:28:12Z,,"I think it would be nice that csvsql, used with the `--insert` option, can output the queries to a script file, and not being mandatory to send it to a database.",
+https://api.github.com/repos/wireservice/csvkit/issues/591,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/591/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/591/comments,https://api.github.com/repos/wireservice/csvkit/issues/591/events,https://github.com/wireservice/csvkit/issues/591,144213166,591,Docs default to old version,,,open,False,,,,3,2016-03-29T09:48:19Z,2016-04-11T02:29:00Z,,"Hey guys, forgive me if this is intentional, but going to csvkit.readthedocs.org redirects you to http://csvkit.readthedocs.org/en/0.9.1/ with an alert box at the top telling you that you're not viewing the latest version, offering a link to http://csvkit.readthedocs.org/en/540/
+
+
+
+Is this intentional? Why wouldn't the docs default to the latest version?",
+https://api.github.com/repos/wireservice/csvkit/issues/585,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/585/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/585/comments,https://api.github.com/repos/wireservice/csvkit/issues/585/events,https://github.com/wireservice/csvkit/pull/585,141113093,585,csvsql: Add support for reading query from a file,,,open,False,,,,3,2016-03-15T22:05:47Z,2016-06-08T14:48:45Z,,"e.g.
+
+```shell
+
+$ csvsql --queryfile complicated.sql file.csv
+
+```
+
+or
+
+```shell
+
+$ csvsql --queryfile - <<SQL file.csv
+
+  some complicated query
+
+SQL
+
+```",
+https://api.github.com/repos/wireservice/csvkit/issues/584,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/584/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/584/comments,https://api.github.com/repos/wireservice/csvkit/issues/584/events,https://github.com/wireservice/csvkit/issues/584,139838726,584,csvstat: output in CSV format,,,open,False,,,,3,2016-03-10T09:54:07Z,2016-07-31T17:57:47Z,,"Hi, could the csvstat command be extended to output the stats in CSV-like format:?
+
+
+
+```
+
+column,class,count,nulls,unique,min,max,sum,mean,median,stdev,max_length,fv_1,fv_2,fv_3,fv_4,fv_5
+
+AAA,int,1000,23,4,...
+
+```
+
+
+
+It would help a lot on data discovery. Thank you for the great tool.
+
+Cheers,
+
+Karol
+
+",
+https://api.github.com/repos/wireservice/csvkit/issues/581,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/581/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/581/comments,https://api.github.com/repos/wireservice/csvkit/issues/581/events,https://github.com/wireservice/csvkit/issues/581,138722126,581,CSVSTAT Memory limits?,,,open,False,,,,0,2016-03-05T21:06:36Z,2016-03-09T17:28:45Z,,"Tried to run csvstat on a 1.9gb file about 7m rows x 74 columns (mixed and sparse) after a long time just got ""killed"". I'm on a 8GB machine with Linux 14.04 & Python 3+ Is there a way to approximate the limits that can be used? Or can I get a more informative error?",
+https://api.github.com/repos/wireservice/csvkit/issues/577,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/577/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/577/comments,https://api.github.com/repos/wireservice/csvkit/issues/577/events,https://github.com/wireservice/csvkit/issues/577,133335453,577,CSVKit changing date columns to integers,,,open,False,,,,9,2016-02-12T20:25:38Z,2016-08-01T02:45:08Z,,"Hi - When we use the command in2csv <file_name.xls> > <new_file_name.csv> , we notice that our date columns are being converted to integers. This is preventing our usage of the csvkit library. We have looked for solutions on stack overflow, but nothing has worked thus far. Are there any work arounds?  We have run updates for openpyxl (openpyxl==2.2.0-b1), csvkit and pip.  We are using python 2.7.1.
+
+
+
+Any ideas?
+
+
+
+Thanks,
+
+Craig",
+https://api.github.com/repos/wireservice/csvkit/issues/575,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/575/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/575/comments,https://api.github.com/repos/wireservice/csvkit/issues/575/events,https://github.com/wireservice/csvkit/issues/575,132945375,575,performance issue with csvclean detecting errors,,,open,False,,,,10,2016-02-11T11:14:53Z,2016-02-11T17:50:01Z,,"Hello,
+
+
+
+we faced a problem with csvclean on a simple case of error :
+
+
+
+- the header of the file is composed of n columns
+
+- the rest of the file is a great number of lines with n+1 columns
+
+
+
+while validating this kind of file with found that csvclean is taking more and more time, not in a linear scale, to report errors that it found on each line
+
+
+
+Thanks",
+https://api.github.com/repos/wireservice/csvkit/issues/572,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/572/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/572/comments,https://api.github.com/repos/wireservice/csvkit/issues/572/events,https://github.com/wireservice/csvkit/issues/572,132331130,572,Add csvsql --update capability to make --insert able to update table,,,open,False,,,,0,2016-02-09T04:50:41Z,2016-02-12T05:33:11Z,,"It is wonderful that `--insert` exists and provides a quick way to have a table created and loaded with data!
+
+
+
+But if the source CSV file is improved, tweaked, or regenerated, then the user is dead in the water. The table in the database is now out of sync with the CSV data, and there is no facility for ever updating it. There are at least two ways that csvkit could solve this:
+
+
+
+* Provide a `--drop` option that would, in a single database transaction, drop the table, create the table, and reload it with the new data.
+
+* The really fun solution would be an `--upsert COLUMN[,COLUMN...]` option that attempted to insert all of the rows, but for those that failed switched to attempting an update using the given columns as keys to search for and match. ",
+https://api.github.com/repos/wireservice/csvkit/issues/571,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/571/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/571/comments,https://api.github.com/repos/wireservice/csvkit/issues/571/events,https://github.com/wireservice/csvkit/issues/571,132329352,571,csvjoin: Add --snifflimit and --no-inference support,,,open,False,,,,1,2016-02-09T04:35:45Z,2016-06-04T15:37:47Z,,Like all the other buffering utilities.,
+https://api.github.com/repos/wireservice/csvkit/issues/561,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/561/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/561/comments,https://api.github.com/repos/wireservice/csvkit/issues/561/events,https://github.com/wireservice/csvkit/issues/561,131692015,561,csvlook: Add option to truncate columns,,,open,False,,,,1,2016-02-05T16:47:56Z,2016-02-09T21:16:11Z,,Thanks to https://github.com/onyxfish/agate/commit/1bb78d3c859e786bda2db57aa8eaf04581561948,
+https://api.github.com/repos/wireservice/csvkit/issues/525,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/525/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/525/comments,https://api.github.com/repos/wireservice/csvkit/issues/525/events,https://github.com/wireservice/csvkit/pull/525,128395189,525,Support for normalizing column names.,,,open,False,,,,0,2016-01-24T13:03:59Z,2016-06-04T05:34:05Z,,"This still has the dependencies, since I can't come up with an alternative way of actually doing the normalisation. 
+
+
+
+Fixes  #396, replaces #505. ",
+https://api.github.com/repos/wireservice/csvkit/issues/517,https://api.github.com/repos/wireservice/csvkit,https://api.github.com/repos/wireservice/csvkit/issues/517/labels{/name},https://api.github.com/repos/wireservice/csvkit/issues/517/comments,https://api.github.com/repos/wireservice/csvkit/issues/517/events,https://github.com/wireservice/csvkit/issues/517,128347760,517,"If additional input is expected, prompt the user",,,open,False,,,,2,2016-01-23T19:33:21Z,2016-06-03T22:39:02Z,,"Otherwise, it just looks like the command is taking forever to run.
+
+
+
+e.g. `csvcut` on its own.
+
+",
