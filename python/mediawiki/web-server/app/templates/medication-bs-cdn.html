@@ -1,0 +1,15 @@
+{% extends "bootstrap/base.html" %}
+{% block title %} {{ medication.title }} {% endblock %}
+{% block styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+      {% block page_content %}
+        <img src="{{ medication.pic.url }}" alt="{{ medication.pic.name }}" width="100%" height="auto">
+        <div>{{ medication.body | safe }}</div>
+      {% endblock %}
+  </div>
+{% endblock %}

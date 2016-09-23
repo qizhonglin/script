@@ -1,0 +1,27 @@
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+
+body {
+  margin: 0;
+}
+
+p {
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    text-align: justify;
+}
+
+#first-pic {
+    width: 100%;
+    height: auto;
+}
+
+#content {
+    margin: 0 1.56em
+}
+
+#title {
+    color: rgb(21, 123, 170);
+    font-weight: normal;
+}
