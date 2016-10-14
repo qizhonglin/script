@@ -8,6 +8,7 @@ import requests
 from wikimarkup import parselite
 from pprint import pprint
 
+
 class KnowledgeParser(object):
     """
     parse content from MediaWiki
@@ -28,9 +29,14 @@ class KnowledgeParser(object):
         fragment = u"&pageids={0}".format(id)
         return self.__parse(fragment)
 
-
     def __parse(self, fragment):
-        self.__fetch_content(fragment)
+        content = KnowledgeParser.fetch_content(fragment)
+        if content is None:
+            return None
+        else:
+            self.id = content["id"]
+            self.title = content["title"]
+            self.wikitext = content["wikitext"]
 
         categorylinks = self.fetch_categorylinks()
 
@@ -44,10 +50,8 @@ class KnowledgeParser(object):
         self.wikitext = self.wikitext.strip()
         body_html = parselite(self.wikitext)
 
-
-
         output = {
-            "pic": allpics[0],
+            "pic": allpics[0] if allpics else None,
             "title": self.title,
             "body": body_html,
             "categorylinks": categorylinks
@@ -60,7 +64,6 @@ class KnowledgeParser(object):
         for i in range(len(category_list)):
             category = category_list[i]
             self.wikitext = self.wikitext.replace(category["wikitext"], "")
-
 
     def __remove_first_pic(self):
         allpics = self.fetch_piclinks()
@@ -89,7 +92,8 @@ class KnowledgeParser(object):
         # pprint(pic_list)
 
         allpics = []
-        r = requests.get(u"{0}/api.php?action=query&list=allimages&pageids={1}&format=json".format(KnowledgeParser.domain, self.id))
+        r = requests.get(
+            u"{0}/api.php?action=query&list=allimages&pageids={1}&format=json".format(KnowledgeParser.domain, self.id))
         decode_json = json.loads(r.text)
         allimages = decode_json["query"]["allimages"]
         for pic in pic_list:
@@ -100,23 +104,22 @@ class KnowledgeParser(object):
         # pprint(allpics)
         return allpics
 
-    def __fetch_content(self, fragment):
-        content = KnowledgeParser.fetch_content(fragment)
-        self.id = content["id"]
-        self.title = content["title"]
-        self.wikitext = content["wikitext"]
-
-
     @staticmethod
     def fetch_content(fragment):
-        url = u"{0}/api.php?action=query&prop=revisions&rvprop=content&format=json".format(KnowledgeParser.domain) + fragment
+        url = u"{0}/api.php?action=query&prop=revisions&rvprop=content&format=json".format(
+            KnowledgeParser.domain) + fragment
         r = requests.get(url)
         decode_json = json.loads(r.text)
-        return {
-            "id": decode_json["query"]["pages"].keys()[0],
-            "title": decode_json["query"]["pages"].values()[0]["title"],
-            "wikitext": decode_json["query"]["pages"].values()[0]["revisions"][0]["*"]
-        }
+        content = {}
+        try:
+            content = {
+                "id": decode_json["query"]["pages"].keys()[0],
+                "title": decode_json["query"]["pages"].values()[0]["title"],
+                "wikitext": decode_json["query"]["pages"].values()[0]["revisions"][0]["*"]
+            }
+        except KeyError, e:
+            content = None
+        return content
 
     @staticmethod
     def fetch_categories(wikitext):
@@ -151,7 +154,8 @@ class KnowledgeParser(object):
         if len(categoryname_list) == 0: return result
         for categoryname in categoryname_list:
             r = requests.get(
-                u"{0}/api.php?action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:{1}&format=json".format(KnowledgeParser.domain,
+                u"{0}/api.php?action=query&list=categorymembers&cmtype=subcat&cmtitle=Category:{1}&format=json".format(
+                    KnowledgeParser.domain,
                     categoryname))
             decode_json = json.loads(r.text)
             categorymembers = decode_json["query"]["categorymembers"]
@@ -165,11 +169,12 @@ class KnowledgeParser(object):
 
             return KnowledgeParser.fetch_allcategories_from_root(subcategory_list, result)
 
-if __name__ == "__main__":
-    titles = u'放了支架不代表“万事大吉”'
-    knowledge_parser = KnowledgeParser()
 
-    pprint(knowledge_parser.parse_bytitles(titles))
+if __name__ == "__main__":
+    # titles = u'放了支架不代表“万事大吉”'
+    # knowledge_parser = KnowledgeParser()
+    #
+    # pprint(knowledge_parser.parse_bytitles(titles))
 
     id = 5
     knowledge_parser = KnowledgeParser()

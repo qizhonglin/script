@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ medication.title }}</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}{{ medication.title }}{% endblock %}
+{% block content %}
 <style>
     @font-face {
         font-family: centraleSans-light;
@@ -49,5 +43,4 @@
     <h1 id="title">{{ medication.title }}</h1>
     {{ medication.body | safe }}
 </div>
-</body>
-</html>
+{% endblock %}
